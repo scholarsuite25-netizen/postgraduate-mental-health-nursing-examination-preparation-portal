@@ -28,8 +28,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               ✨ Your success in the examination starts with disciplined daily practice!
             </div>
             <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-800 leading-relaxed">
-              <strong className="text-blue-400 font-semibold block mb-0.5">Statutory Council Scope Note:</strong>
-              NMCN statutory examinations govern the 5 core post-basic specialisations (Medical-Surgical, Midwifery, Paediatric, Public Health, A&E/Critical Care). Mental Health Specialty Fellowship examinations are administered under WAPCNM.
+              <strong className="text-blue-400 font-semibold block mb-0.5">NMCN Statutory Professional Specialisations:</strong>
+              NMCN statutory professional examinations govern the 6 registered post-basic specialisations (Medical-Surgical, Midwifery, Paediatrics, Public Health, Accident & Emergency / Critical Care, and Mental Health & Psychiatric Nursing).
             </div>
           </div>
 

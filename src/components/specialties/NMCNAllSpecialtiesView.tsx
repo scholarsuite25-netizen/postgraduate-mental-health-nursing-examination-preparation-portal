@@ -103,29 +103,8 @@ export const NMCNAllSpecialtiesView: React.FC<NMCNAllSpecialtiesViewProps> = ({
             NMCN Professional Nursing Specialisations & Global Licensure
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Statutory council curricula and clinical examination standards across the 5 core post-basic specialisations. Evaluated against the official council benchmark: <strong>50.0% Pass Mark</strong>, <strong>75.0% Distinction</strong>, and non-negotiable <strong>Red Flag patient safety policies</strong>.
+            Statutory council curricula and clinical examination standards across the 6 registered post-basic nursing specialisations (Medical-Surgical, Midwifery, Paediatric, Public Health, Accident & Emergency / Critical Care, and Mental Health & Psychiatric Nursing). Evaluated against the official council benchmark: <strong>50.0% Pass Mark</strong>, <strong>75.0% Distinction</strong>, and non-negotiable <strong>Red Flag patient safety policies</strong>.
           </p>
-        </div>
-      </div>
-
-      {/* Statutory Scope Clarification Callout */}
-      <div className="bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400 dark:border-amber-600/70 p-4 sm:p-5 rounded-2xl shadow-sm">
-        <div className="flex items-start gap-3.5">
-          <span className="text-2xl shrink-0">⚠️</span>
-          <div className="space-y-1.5 text-xs sm:text-sm">
-            <h4 className="font-black text-amber-950 dark:text-amber-200 uppercase tracking-wide flex items-center gap-2">
-              <span>Statutory Examination Scope Clarification:</span>
-              <span className="text-rose-600 dark:text-rose-400 font-extrabold underline decoration-rose-500">
-                Mental Health Speciality is NOT among NMCN Examinations
-              </span>
-            </h4>
-            <p className="text-amber-900/90 dark:text-amber-300/90 leading-relaxed">
-              Statutory licensure examinations administered by the <strong>Nursing & Midwifery Council of Nigeria (NMCN)</strong> under Act Cap N143 LFN 2004 govern the <strong>five (5) registered clinical nursing specialisations</strong> featured below: <em>Medical-Surgical Nursing, Midwifery, Paediatric Nursing, Public Health Nursing, and Accident/Emergency & Critical Care Nursing</em>.
-            </p>
-            <p className="text-amber-900/90 dark:text-amber-300/90 leading-relaxed">
-              <strong>Postgraduate Mental Health & Psychiatric Nursing</strong> specialty fellowship, membership credentials, and board examinations are administered exclusively under the <strong>West African Postgraduate College of Nurses and Midwives (WAPCNM Faculty of Mental Health & Psychiatric Nursing)</strong>.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -133,7 +112,7 @@ export const NMCNAllSpecialtiesView: React.FC<NMCNAllSpecialtiesViewProps> = ({
       <div className="flex flex-wrap gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
         {NMCN_SPECIALTIES.map((spec, idx) => {
           const isSelected = idx === selectedSpecialtyIndex;
-          const icons = ['🩺', '👶', '🧸', '💉', '🚑'];
+          const icons = ['🩺', '👶', '🧸', '💉', '🚑', '🧠'];
           return (
             <button
               key={spec.id}

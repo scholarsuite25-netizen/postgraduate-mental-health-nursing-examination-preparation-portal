@@ -1504,5 +1504,307 @@ export const NMCN_SPECIALTIES: NMCNSpecialty[] = [
         }
       ]
     }
+  },
+  {
+    id: 'spec-mentalhealth',
+    code: 'NMCN-PSYCH-06',
+    title: 'Mental Health & Psychiatric Nursing (Post-Basic)',
+    regulatoryTitle: 'Post-Basic Psychiatric & Mental Health Nursing Licensure',
+    statutoryAuthority: 'Nursing and Midwifery Council of Nigeria (NMCN) Act, Cap N143 LFN 2004',
+    description:
+      'Advanced psychiatric assessment, psychomotor crisis de-escalation, rapid tranquilization safety surveillance, high-lethality suicide risk mitigation, psychopharmacologic toxicity management, and statutory patient rights under Nigerian mental health law.',
+    competencyDomains: [
+      'Comprehensive Mental State Examination (MSE) & Psychopathology',
+      'Acute Psychomotor Agitation & Non-Violent Crisis De-escalation',
+      'Rapid Tranquilization Protocol, Airway Safety & EPS/NMS Surveillance',
+      'High-Lethality Suicide & Self-Harm Risk Assessment (Columbia C-SSRS)',
+      'Statutory Patient Rights, Confidentiality & Involuntary Admission Law'
+    ],
+    passMarkPercentage: 50.0,
+    distinctionPercentage: 75.0,
+    station: {
+      id: 'nmcn-st-mentalhealth',
+      title: 'Acute Psychomotor Agitation, Verbal De-escalation & Safe Rapid Tranquilization Protocol',
+      subTitle: 'Non-Violent Verbal De-escalation, Physical Safety, Vital Signs & Emergency Antipsychotic Monitoring',
+      clinicalScenario:
+        'A 32-year-old male with known paranoid schizophrenia is brought to the acute psychiatric emergency assessment unit by family and police escorts. He has discontinued his oral medications for 3 weeks. He is pacing rapidly, shouting incoherently about government surveillance implants, brandishing a heavy wooden pen as a perceived weapon, clenching his fists, and glaring threateningly at staff. He is refusing oral medications and screaming that the hospital is trying to poison him. Triage notes mark him at high imminent violence risk.',
+      doorBriefing:
+        'Candidate Door Brief: You are the Senior Registered Psychiatric Nurse in charge of the Psychiatric Emergency Assessment Unit. Enter the room, ensure environmental safety and personal distance, execute structured verbal de-escalation, safely manage the object, conduct emergency assessment, coordinate safe clinical rapid tranquilization adhering to statutory council guidelines, and continuously monitor vital signs. You will then answer 10 statutory licensure MCQs.',
+      candidateInstructions: [
+        'Maintain personal and environmental safety: position yourself near an unblocked exit and maintain 2 arms-lengths distance.',
+        'Use open, non-threatening posture and calm, non-confrontational verbal communication.',
+        'Acknowledge patient distress and paranoia without validating or disputing delusional content.',
+        'Verbally negotiate the safe surrender/placement of the hand-held pen without physical wrestling.',
+        'Offer oral calming medication in a respectful, transparent manner before initiating parenteral routes.',
+        'Prepare and coordinate rapid tranquilization with team support, ensuring pre- and post-administration vital signs and airway patency monitoring.',
+        'Document the incident objectively according to statutory NMCN mental health documentation standards.'
+      ],
+      patientProfile: {
+        name: 'Emeka Okafor',
+        age: 32,
+        gender: 'Male',
+        setting: 'Psychiatric Emergency Assessment Unit (Room 2)',
+        chiefComplaint: 'Acute psychomotor agitation, paranoia, sleep deprivation for 4 days, and threats of violence.',
+        historyOfPresentIllness: 'Diagnosed with paranoid schizophrenia 6 years ago. Defaulted on maintenance depot fluphenazine 3 weeks ago. Relapsed with command auditory hallucinations and persecutory delusions.',
+        currentMedications: ['Prescribed Depot Fluphenazine Decanoate 25mg IM monthly (defaulted)', 'Oral Haloperidol 5mg BD (defaulted)'],
+        allergies: ['No known drug allergies (NKDA)']
+      },
+      entryVitals: {
+        bloodPressure: '146/92 mmHg (Hypertensive response to acute agitation)',
+        heartRate: '112 bpm (Sinus Tachycardia)',
+        respiratoryRate: '24 cpm',
+        temperature: '37.1 °C',
+        oxygenSaturation: '98% on room air',
+        painOrDistressScore: 'Agitation/Distress: 9/10 (High Imminent Risk)'
+      },
+      equipmentTray: [
+        'Personal Duress Alarm / Call Bell',
+        'Automated Blood Pressure Monitor & Pulse Oximeter',
+        'Prescription Chart with Rapid Tranquilization Protocol (Haloperidol / Olanzapine / Lorazepam)',
+        'Oral Medication Cups with Clean Water',
+        'IM Injection Tray: Sterile 21G/23G Needles, 3mL Syringes, Alcohol Swabs, Sharps Bin',
+        'IM Procyclidine / Benztropine (available on standby for acute dystonic reactions)',
+        'Full Resuscitation Kit: Bag-Valve-Mask (Ambu Bag), Suction, Oxygen Mask, and IV Flumazenil (standby for benzodiazepine-induced respiratory depression)',
+        'Structured Physical Health & MSE Monitoring Chart'
+      ],
+      checklist: [
+        {
+          id: 'mh-c1',
+          stepNumber: 1,
+          instruction: 'Environmental Safety & Staff Positioning: Check room for potential weapons/hazards, position self between patient and unblocked exit, and maintain safe physical distance (minimum 2 arms lengths).',
+          category: 'Preparation & Safety',
+          isCriticalFail: false,
+          points: 10,
+          rationale: 'Psychiatric emergency safety begins with environmental risk reduction and preserving uninhibited egress for both candidate and patient.'
+        },
+        {
+          id: 'mh-c2',
+          stepNumber: 2,
+          instruction: 'Establish Calm, Empathetic Verbal Rapport: Introduce self clearly, use low-pitched, calm voice, speak in short concrete sentences, and display open non-verbal posture without crossed arms.',
+          category: 'Assessment & Communication',
+          isCriticalFail: false,
+          points: 10,
+          rationale: 'Agitated and paranoid individuals misinterpret complex instructions and defensive non-verbals as hostility.'
+        },
+        {
+          id: 'mh-c3',
+          stepNumber: 3,
+          instruction: 'De-escalate Paranoia Without Collusion or Confrontation: Validate the emotional experience of fear and anxiety while avoiding arguing against or validating the persecutory delusions.',
+          category: 'Assessment & Communication',
+          isCriticalFail: false,
+          points: 10,
+          rationale: 'Directly disputing delusions increases hostility, while agreeing with them reinforces delusional beliefs. Validating the emotional state de-escalates affective tension.'
+        },
+        {
+          id: 'mh-c4',
+          stepNumber: 4,
+          instruction: 'Negotiate Weapon/Object Surrender: Calmly request the patient to place the pen on the table; acknowledge concern for safety without lunging or physically snatching the object.',
+          category: 'Intervention & Procedure',
+          isCriticalFail: false,
+          points: 10,
+          rationale: 'Physical snatching triggers immediate fight-or-flight aggression. Voluntary placement de-escalates confrontation.'
+        },
+        {
+          id: 'mh-c5',
+          stepNumber: 5,
+          instruction: 'Offer Oral Calming Medication First (Least Restrictive Principle): Explain purpose of medication transparently (to help sleep and reduce severe distress) and offer oral liquid or tablet before considering parenteral injections.',
+          category: 'Intervention & Procedure',
+          isCriticalFail: false,
+          points: 10,
+          rationale: 'NMCN and international psychiatric nursing guidelines mandate using the least restrictive intervention before coercive parenteral medication.'
+        },
+        {
+          id: 'mh-c6',
+          stepNumber: 6,
+          instruction: 'Safe Execution of Rapid Tranquilization with Sufficient Trained Team: When oral medication is refused and violence is imminent, mobilize at least 5 trained staff members with designated roles, explain procedure calmly, and administer prescribed IM medication safely into upper outer quadrant of gluteal or anterolateral thigh.',
+          category: 'Intervention & Procedure',
+          isCriticalFail: false,
+          points: 10,
+          rationale: 'Team coordination prevents injury to patient and staff; proper anatomical site avoids sciatic nerve damage and ensures rapid absorption.'
+        },
+        {
+          id: 'mh-c7',
+          stepNumber: 7,
+          instruction: 'CRITICAL SAFETY: Post-Tranquilization Airway & Vital Signs Monitoring: Immediately verify patent airway, place patient in safe recovery/semi-recumbent position (NEVER prone), and initiate vital signs monitoring every 15 minutes (BP, HR, RR, SpO2, sedation level).',
+          category: 'Evaluation & Documentation',
+          isCriticalFail: true,
+          criticalFailReason: 'Prone positioning or failure to monitor vitals during rapid tranquilization risks positional asphyxia, severe respiratory depression, and sudden cardiovascular collapse.',
+          points: 10,
+          rationale: 'Prone positioning or failure to monitor vitals during rapid tranquilization risks positional asphyxia, severe respiratory depression, and sudden cardiovascular collapse.'
+        },
+        {
+          id: 'mh-c8',
+          stepNumber: 8,
+          instruction: 'CRITICAL SAFETY: Antipsychotic Toxicity & Adverse Effect Surveillance: Inspect for acute extrapyramidal symptoms (acute dystonia, laryngeal spasm, oculogyric crisis) and Neuroleptic Malignant Syndrome (severe muscle rigidity, hyperpyrexia, autonomic instability), having anticholinergic reversal (IM Procyclidine/Benztropine) immediately accessible.',
+          category: 'Evaluation & Documentation',
+          isCriticalFail: true,
+          criticalFailReason: 'Acute laryngeal dystonia can rapidly cause fatal upper airway obstruction, while unrecognized NMS has up to 10-20% mortality.',
+          points: 10,
+          rationale: 'Acute laryngeal dystonia can rapidly cause fatal upper airway obstruction, while unrecognized NMS has up to 10-20% mortality.'
+        },
+        {
+          id: 'mh-c9',
+          stepNumber: 9,
+          instruction: 'Post-Crisis Debriefing & Re-establishing Therapeutic Alliance: When the patient regains composure, offer reassurance, debrief the experience, explain reasons for interventions, and provide fluids and nourishment.',
+          category: 'Assessment & Communication',
+          isCriticalFail: false,
+          points: 10,
+          rationale: 'Post-incident debriefing reduces psychological trauma, clarifies misconceptions, and restores the therapeutic nurse-patient relationship.'
+        },
+        {
+          id: 'mh-c10',
+          stepNumber: 10,
+          instruction: 'Statutory Documentation & Incident Notification: Document chronological sequence, exact triggers, de-escalation attempts, specific medications administered with batch numbers/sites, post-tranquilization vitals, and statutory involuntary assessment forms under NMCN standards.',
+          category: 'Evaluation & Documentation',
+          isCriticalFail: false,
+          points: 10,
+          rationale: 'Comprehensive, objective legal documentation protects patient statutory human rights and provides an uncompromised audit trail.'
+        }
+      ],
+      fatalErrorNotice:
+        'RED FLAG VIOLATIONS (AUTOMATIC CRITICAL FAILURE): Leaving an agitated, actively hallucinating patient unmonitored; positioning the patient prone during or following restraint (severe risk of positional asphyxia); administering parenteral rapid tranquilization without vital sign monitoring and resuscitation equipment on standby; or failing to recognize and treat acute laryngeal dystonia.',
+      mcqs: [
+        {
+          id: 'mh-q1',
+          questionNumber: 1,
+          questionText: 'During the Mental State Examination (MSE) of an agitated psychiatric patient, the nurse notes that the patient continuously jumps from one idea to another rapidly, connected only by superficial associations and rhyming puns. What psychopathological phenomenon is this?',
+          options: [
+            { id: 'A', text: 'Perseveration' },
+            { id: 'B', text: 'Flight of Ideas' },
+            { id: 'C', text: 'Thought Insertion' },
+            { id: 'D', text: 'Thought Blocking' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'Flight of ideas is characterized by continuous, rapid speech with abrupt changes from one topic to another, often based on understandable associations, distractions, or play on words (clang associations), classic in acute mania and severe agitation.',
+          learningDomain: 'MSE & Psychopathology'
+        },
+        {
+          id: 'mh-q2',
+          questionNumber: 2,
+          questionText: 'Under the Nursing and Midwifery Council of Nigeria (NMCN) and international psychiatric guidelines, what is the FIRST-LINE clinical strategy when managing an escalating, agitated psychiatric patient?',
+          options: [
+            { id: 'A', text: 'Immediate four-point mechanical restraint' },
+            { id: 'B', text: 'Verbal de-escalation and environmental adaptation in the least restrictive setting' },
+            { id: 'C', text: 'Immediate involuntary intramuscular rapid tranquilization' },
+            { id: 'D', text: 'Isolation in an unlit seclusion room without communication' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'NMCN professional standards mandate the least restrictive principle: verbal de-escalation, establishing calm communication, reducing sensory stimulation, and offering choices must always precede restrictive physical or parenteral interventions.',
+          learningDomain: 'Crisis De-escalation & Legal Principles'
+        },
+        {
+          id: 'mh-q3',
+          questionNumber: 3,
+          questionText: 'Thirty minutes after receiving IM Haloperidol 5mg for acute agitation, a patient suddenly develops involuntary upward deviation of the eyes (oculogyric crisis), neck torsion (torticollis), and difficulty speaking. What is the emergency nursing diagnosis and immediate treatment?',
+          options: [
+            { id: 'A', text: 'Tardive dyskinesia; increase the haloperidol dose' },
+            { id: 'B', text: 'Acute dystonic reaction; administer IM/IV Procyclidine (or Benztropine) 5-10mg immediately' },
+            { id: 'C', text: 'Conversion disorder; isolate the patient and observe' },
+            { id: 'D', text: 'Malingering; provide reassurance and oral fluids' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'Acute dystonia occurs within hours of first-generation antipsychotic administration due to acute D2 receptor blockade causing striatal cholinergic excess. It is an emergency (risk of laryngeal dystonia) treated with immediate anticholinergic agents like IM Procyclidine 5-10mg or Diphenhydramine.',
+          learningDomain: 'Psychopharmacology & Adverse Effects'
+        },
+        {
+          id: 'mh-q4',
+          questionNumber: 4,
+          questionText: 'Which clinical tetrad is pathognomonic for Neuroleptic Malignant Syndrome (NMS), a life-threatening idiosyncratic reaction to dopamine receptor antagonists?',
+          options: [
+            { id: 'A', text: 'Hypothermia, flaccid paralysis, diarrhea, and miosis' },
+            { id: 'B', text: 'Hyperthermia (often >38.5°C), severe "lead-pipe" muscle rigidity, autonomic instability, and altered mental status' },
+            { id: 'C', text: 'Hypertension, polyuria, polydipsia, and hyporeflexia' },
+            { id: 'D', text: 'Maculopapular rash, wheezing, angioedema, and bradycardia' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'NMS is characterized by severe hyperthermia, generalized muscular rigidity (lead-pipe), altered sensorium, autonomic dysregulation (tachycardia, labile BP, diaphoresis), and markedly elevated serum creatine kinase (CK). Immediate cessation of antipsychotics and intensive supportive care (Dantrolene/Bromocriptine) are required.',
+          learningDomain: 'Psychiatric Emergencies (NMS)'
+        },
+        {
+          id: 'mh-q5',
+          questionNumber: 5,
+          questionText: 'When assessing a patient with high-lethality suicidal ideation, which question is most critical for establishing immediate imminent risk?',
+          options: [
+            { id: 'A', text: '"Have you ever thought about how your family would react to your funeral?"' },
+            { id: 'B', text: '"Do you have a specific plan, access to the intended means (e.g., firearms, pills), and an intent to carry it out today?"' },
+            { id: 'C', text: '"Why do you think life is not worth living when others have it worse?"' },
+            { id: 'D', text: '"Will you promise me in writing that you will never feel sad again?"' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'Assessment of imminent lethality requires evaluating three specific components: explicit plan, available lethal means, and immediate intent. Asking directly does NOT plant ideas in the patient’s mind but is life-saving.',
+          learningDomain: 'Suicide Risk Assessment (C-SSRS)'
+        },
+        {
+          id: 'mh-q6',
+          questionNumber: 6,
+          questionText: 'A patient receiving maintenance Lithium carbonate for bipolar disorder presents with coarse hand tremors, ataxia, slurred speech, persistent nausea/vomiting, and confusion. What is the priority nursing intervention?',
+          options: [
+            { id: 'A', text: 'Administer the next scheduled lithium dose with milk' },
+            { id: 'B', text: 'Withhold lithium immediately, notify the psychiatrist, and order urgent serum lithium and renal/electrolyte panels' },
+            { id: 'C', text: 'Encourage strenuous aerobic exercise to sweat out the excess drug' },
+            { id: 'D', text: 'Administer oral potassium supplements and discharge home' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'Coarse tremors, ataxia, slurred speech, gastrointestinal distress, and confusion indicate moderate-to-severe lithium toxicity (levels typically >1.5-2.0 mmol/L). The nurse must immediately withhold lithium, check serum level, and initiate intravenous fluid hydration.',
+          learningDomain: 'Mood Stabilizers & Toxicities'
+        },
+        {
+          id: 'mh-q7',
+          questionNumber: 7,
+          questionText: 'Under the Nigerian Mental Health Act 2021 and NMCN ethical standards, what fundamental right is legally guaranteed to voluntary mental health inpatients regarding their care?',
+          options: [
+            { id: 'A', text: 'Their property is automatically transferred to hospital management upon admission' },
+            { id: 'B', text: 'The right to confidentiality, informed consent to treatments (unless legally certified emergency), and dignity free from cruel, inhuman, or degrading punishment' },
+            { id: 'C', text: 'They lose the right to vote or communicate with legal representation permanently' },
+            { id: 'D', text: 'Hospital staff may utilize indefinite physical seclusion as a disciplinary measure' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'The Mental Health Act 2021 guarantees the rights of persons with mental health conditions, protecting dignity, right to confidentiality, informed consent, legal representation, and strictly prohibiting punitive or degrading treatments.',
+          learningDomain: 'Mental Health Legislation & Rights'
+        },
+        {
+          id: 'mh-q8',
+          questionNumber: 8,
+          questionText: 'A psychiatric nurse is caring for a patient experiencing frightening visual and command auditory hallucinations telling him to harm himself. What is the most therapeutic communication response?',
+          options: [
+            { id: 'A', text: '"You know there is nobody in the corner; you are just imagining things."' },
+            { id: 'B', text: '"I do not hear the voices, but I understand that they are very scary for you. You are in a safe place, and I am here with you."' },
+            { id: 'C', text: '"Tell the voices that they have no right to speak to you and yell back at them."' },
+            { id: 'D', text: '"I can see the figures too; let us both hide under the bed together."' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'The nurse should validate reality ("I do not hear the voices"), acknowledge the patient’s affective distress ("I understand they are very scary for you"), and provide reassurance of safety without reinforcing the hallucination or belittling the patient.',
+          learningDomain: 'Therapeutic Communication'
+        },
+        {
+          id: 'mh-q9',
+          questionNumber: 9,
+          questionText: 'In a patient receiving Clozapine for treatment-resistant schizophrenia, what mandatory laboratory parameter must the psychiatric nurse monitor continuously to detect fatal Agranulocytosis?',
+          options: [
+            { id: 'A', text: 'Serum amylase and lipase' },
+            { id: 'B', text: 'Absolute Neutrophil Count (ANC) / Full Blood Count' },
+            { id: 'C', text: 'Serum prostate-specific antigen (PSA)' },
+            { id: 'D', text: 'Urinary protein and microalbumin' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'Clozapine carries a black-box warning for severe neutropenia/agranulocytosis (ANC < 500/μL). Mandatory national protocols require regular ANC monitoring (weekly for the first 18 weeks, then bi-weekly, then monthly) to prevent lethal opportunistic sepsis.',
+          learningDomain: 'Specialized Psychopharmacology'
+        },
+        {
+          id: 'mh-q10',
+          questionNumber: 10,
+          questionText: 'Why is the "prone" (face-down) position strictly contraindicated during physical restraint of an agitated psychiatric patient under NMCN patient safety directives?',
+          options: [
+            { id: 'A', text: 'It damages the patient’s clothing' },
+            { id: 'B', text: 'It creates a severe risk of positional asphyxia and sudden cardiac arrest due to restricted thoracic wall excursion' },
+            { id: 'C', text: 'It makes it too easy for the patient to escape' },
+            { id: 'D', text: 'It prevents the patient from taking oral fluids' }
+          ],
+          correctAnswer: 'B',
+          explanation: 'Prone restraint compresses the chest wall and diaphragm, severely inhibiting respiratory excursion and venous return. This is the primary mechanism of restraint-related sudden deaths in psychiatric settings (positional asphyxia). Restraint must always maintain open airway and supine/lateral positioning.',
+          learningDomain: 'Patient Safety & Restraint Directives'
+        }
+      ]
+    }
   }
 ];
