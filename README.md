@@ -34,6 +34,19 @@ An interactive, client-side examination preparation, learning, and self-assessme
   - Question palette navigation and bookmarking.
   - 70% Pass Mark criterion with detailed result slip generation.
 
+- **Postgraduate Clinical Examination Center (CAOSCE & Clinical Suites):**
+  - **6-Station Autonomous CAOSCE Circuit**: Clock-synchronized 120-minute simulation (10-min practical checklist + 10-min scenario MCQs per station) with synthesized 750Hz warning bell and 1000Hz rotation chime via Web Audio API.
+  - **Non-Negotiable Red Flag Safety Policy**: Breaching or omitting predefined critical patient safety steps automatically caps practical marks at 49% (Station Referral) with statutory remedial directives.
+  - **Specialized Postgraduate Mental Health Stations**:
+    1. Acute Psychiatric Emergency, Aggression De-escalation & Rapid Tranquilization
+    2. Suicide Risk Stratification (C-SSRS) & Structured Safety Planning
+    3. Neuroleptic Malignant Syndrome (NMS) vs Serotonin Toxicity Emergency
+    4. Dual Diagnosis & Severe Alcohol Delirium Tremens (CIWA-Ar Protocol)
+    5. Forensic Psychiatric Assessment & Mental Health Act Jurisprudence
+    6. Perinatal Psychosis, Mother-Infant Safety & Lewy Body Dementia Sensitivity
+  - **Next Generation NCLEX (NGN) Clinical Judgment Case Studies**: Unfolding 6-stage clinical decision cases mapped to the NCSBN cognitive framework.
+  - **Psychopharmacology Titration & Math Lab**: Practical calculation scenarios including Cockcroft-Gault creatinine clearance for lithium titration, Clozapine ANC REMS monitoring thresholds, long-acting depot conversions, and Bazett QTc interval correction.
+
 - **Offline-First & Local Persistence:**
   - Powered by browser IndexedDB (`WAPCNM_MHN_DB_V2`).
   - No external database or credentials required—runs 100% offline.

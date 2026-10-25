@@ -18,9 +18,14 @@ import {
   Menu, 
   X,
   Phone,
-  MessageCircle
+  MessageCircle,
+  Activity,
+  Volume2,
+  VolumeX,
+  ShieldCheck
 } from 'lucide-react';
 import { StorageService } from '../services/storageService';
+import { AudioChimes } from '../utils/audioChimes';
 
 interface NavbarProps {
   activeTab: string;
@@ -29,6 +34,7 @@ interface NavbarProps {
   setCandidateName: (name: string) => void;
   questionCount: number;
   reportCount: number;
+  caosceCount?: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -37,11 +43,18 @@ export const Navbar: React.FC<NavbarProps> = ({
   candidateName,
   setCandidateName,
   questionCount,
-  reportCount
+  reportCount,
+  caosceCount = 0
 }) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState(candidateName);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(AudioChimes.getMuteState());
+
+  const handleToggleMute = () => {
+    const nextMuted = AudioChimes.toggleMute();
+    setIsMuted(nextMuted);
+  };
 
   const handleSaveName = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,11 +67,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'clinical-exams', label: 'Clinical Exams', icon: Activity, badge: 'CAOSCE & NGN' },
     { id: 'modules', label: 'Modules & Practice', icon: BookOpen },
     { id: 'reports', label: 'My Reports', icon: FileText, badge: reportCount > 0 ? reportCount : undefined },
     { id: 'bookmarks', label: 'Bookmarks & Review', icon: Bookmark },
     { id: 'admin', label: 'Question Bank', icon: Settings, count: questionCount },
     { id: 'help', label: 'Help & Privacy', icon: HelpCircle },
+    { id: 'specialties', label: 'NMCN Specialisations', icon: ShieldCheck },
   ];
 
   return (
@@ -114,6 +129,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
               )}
             </div>
+
+            {/* Audio Chime Mute/Unmute Toggle */}
+            <button
+              onClick={handleToggleMute}
+              className={`p-2 rounded-xl border transition-colors cursor-pointer ${
+                isMuted
+                  ? 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400'
+                  : 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400'
+              }`}
+              title={isMuted ? 'CAOSCE Bells Muted - Click to Unmute' : 'CAOSCE Bells Active (750Hz/1000Hz) - Click to Mute'}
+            >
+              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            </button>
 
             {/* Hamburger Menu Toggle Button */}
             <button

@@ -1,13 +1,15 @@
 import { AssessmentReport, Question, IncorrectRecord } from '../types';
+import { CAOSCEReport } from '../types/clinicalExams';
 import { getAllQuestions, invalidateQuestionCache } from '../data/questionBank';
 
 const DB_NAME = 'WAPCNM_MHN_DB_V2';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const STORE_REPORTS = 'reports';
 const STORE_QUESTIONS = 'questions';
 const STORE_BOOKMARKS = 'bookmarks';
 const STORE_INCORRECT = 'incorrect_queue';
 const STORE_SETTINGS = 'settings';
+const STORE_CAOSCE = 'caosce_reports';
 
 export class StorageService {
   private static dbPromise: Promise<IDBDatabase> | null = null;
@@ -17,6 +19,7 @@ export class StorageService {
     bookmarks?: string[];
     incorrect?: IncorrectRecord[];
     name?: string;
+    caosceReports?: CAOSCEReport[];
   } = {};
 
   private static getDB(): Promise<IDBDatabase> {
@@ -56,6 +59,9 @@ export class StorageService {
               }
               if (!db.objectStoreNames.contains(STORE_SETTINGS)) {
                 db.createObjectStore(STORE_SETTINGS, { keyPath: 'key' });
+              }
+              if (!db.objectStoreNames.contains(STORE_CAOSCE)) {
+                db.createObjectStore(STORE_CAOSCE, { keyPath: 'id' });
               }
             } catch (e) {
               console.error('Error upgrading IDB store:', e);
@@ -404,4 +410,90 @@ export class StorageService {
       console.warn('Failed to save candidate name', err);
     }
   }
+
+  // --- CAOSCE Reports Persistence ---
+  public static async saveCAOSCEReport(report: CAOSCEReport): Promise<void> {
+    try {
+      const current = await this.getCAOSCEReports();
+      const updated = [report, ...current.filter((r) => r.id !== report.id)];
+      this.memoryCache.caosceReports = updated;
+
+      try {
+        localStorage.setItem('wapcnm_fallback_caosce_reports', JSON.stringify(updated.slice(0, 30)));
+      } catch (e) {
+        console.warn('LocalStorage save failed for CAOSCE report', e);
+      }
+
+      const db = await this.getDB();
+      if (db) {
+        const transaction = db.transaction(STORE_CAOSCE, 'readwrite');
+        const store = transaction.objectStore(STORE_CAOSCE);
+        store.put(report);
+      }
+    } catch (err) {
+      console.error('Failed to save CAOSCE report', err);
+    }
+  }
+
+  public static async getCAOSCEReports(): Promise<CAOSCEReport[]> {
+    if (this.memoryCache.caosceReports && this.memoryCache.caosceReports.length > 0) {
+      return this.memoryCache.caosceReports;
+    }
+
+    try {
+      const db = await this.getDB();
+      if (!db) {
+        const saved = localStorage.getItem('wapcnm_fallback_caosce_reports');
+        const parsed: CAOSCEReport[] = saved ? JSON.parse(saved) : [];
+        this.memoryCache.caosceReports = parsed;
+        return parsed;
+      }
+
+      return new Promise((resolve) => {
+        const transaction = db.transaction(STORE_CAOSCE, 'readonly');
+        const store = transaction.objectStore(STORE_CAOSCE);
+        const request = store.getAll();
+
+        request.onsuccess = () => {
+          const list = (request.result as CAOSCEReport[]) || [];
+          list.sort((a, b) => b.dateTimestamp - a.dateTimestamp);
+          this.memoryCache.caosceReports = list;
+          resolve(list);
+        };
+
+        request.onerror = () => {
+          const saved = localStorage.getItem('wapcnm_fallback_caosce_reports');
+          const parsed: CAOSCEReport[] = saved ? JSON.parse(saved) : [];
+          this.memoryCache.caosceReports = parsed;
+          resolve(parsed);
+        };
+      });
+    } catch {
+      return [];
+    }
+  }
+
+  public static async getCAOSCEReportById(id: string): Promise<CAOSCEReport | null> {
+    const reports = await this.getCAOSCEReports();
+    return reports.find((r) => r.id === id) || null;
+  }
+
+  public static async deleteCAOSCEReport(id: string): Promise<void> {
+    try {
+      const current = await this.getCAOSCEReports();
+      const updated = current.filter((r) => r.id !== id);
+      this.memoryCache.caosceReports = updated;
+      localStorage.setItem('wapcnm_fallback_caosce_reports', JSON.stringify(updated));
+
+      const db = await this.getDB();
+      if (db) {
+        const transaction = db.transaction(STORE_CAOSCE, 'readwrite');
+        const store = transaction.objectStore(STORE_CAOSCE);
+        store.delete(id);
+      }
+    } catch (err) {
+      console.warn('Failed to delete CAOSCE report', err);
+    }
+  }
 }
+

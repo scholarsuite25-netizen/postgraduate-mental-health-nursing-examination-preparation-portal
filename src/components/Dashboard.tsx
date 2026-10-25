@@ -32,6 +32,7 @@ import {
   ReferenceLine 
 } from 'recharts';
 import { AssessmentReport, Question, IncorrectRecord } from '../types';
+import { CAOSCEReport } from '../types/clinicalExams';
 
 interface DashboardProps {
   candidateName: string;
@@ -39,6 +40,7 @@ interface DashboardProps {
   reports: AssessmentReport[];
   bookmarks: string[];
   incorrectQueue: IncorrectRecord[];
+  caosceReports?: CAOSCEReport[];
   onStartPractice: (module?: string) => void;
   onStartLearning: (module?: string) => void;
   onStartMock: () => void;
@@ -53,6 +55,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   reports,
   bookmarks,
   incorrectQueue,
+  caosceReports = [],
   onStartPractice,
   onStartLearning,
   onStartMock,
@@ -173,6 +176,38 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <span>Launch Mock Examination (70% Pass Mark)</span>
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* NEW: Postgraduate Clinical Examination Suites Showcase */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900 via-slate-900 to-purple-950 p-6 sm:p-7 text-white shadow-lg border border-indigo-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="space-y-2 max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+            <span>⚡</span> NEW: Autonomous CAOSCE & NGN Clinical Suites
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+            Postgraduate Clinical Examination Center
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Test hands-on psychomotor de-escalation, suicide risk stratification, NMS vs Serotonin emergencies, and mental health jurisprudence across 6 clock-synchronized stations with non-negotiable <strong>Red Flag patient safety criteria</strong>.
+          </p>
+          {caosceReports.length > 0 && (
+            <div className="text-xs text-indigo-300 pt-1 flex items-center gap-2">
+              <span>Last CAOSCE Result:</span>
+              <strong className="text-white bg-white/10 px-2 py-0.5 rounded font-mono">
+                {caosceReports[0].overallCompositePercentage.toFixed(1)}% ({caosceReports[0].overallStatus})
+              </strong>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <button
+            onClick={() => onNavigate('clinical-exams')}
+            className="px-6 py-3 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white shadow-lg shadow-indigo-950/50 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>🎯</span> Enter Clinical Exam Suites →
+          </button>
         </div>
       </div>
 
