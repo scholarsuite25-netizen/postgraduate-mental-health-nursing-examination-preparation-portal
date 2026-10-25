@@ -37,15 +37,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div className="space-y-3">
             <h4 className="font-bold text-white text-sm">Quick Portal Navigation</h4>
             <ul className="space-y-2 text-xs">
-              <li className="pb-1">
-                <button 
-                  onClick={() => { onNavigate('specialties'); window.scrollTo(0,0); }} 
-                  className="w-full text-left inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-600 hover:to-indigo-600 text-white font-black text-xs shadow-md border border-blue-400/50 transition-all cursor-pointer"
-                >
-                  <ShieldCheck className="w-4 h-4 text-cyan-300 shrink-0" />
-                  <span>NMCN Statutory Specialisations & Licensure Suite</span>
-                </button>
-              </li>
               <li>
                 <button onClick={() => { onNavigate('dashboard'); window.scrollTo(0,0); }} className="hover:text-emerald-400 transition-colors cursor-pointer">
                   WAPCNM Tutorial
@@ -74,6 +65,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <li>
                 <button onClick={() => { onNavigate('help'); window.scrollTo(0,0); }} className="hover:text-emerald-400 transition-colors cursor-pointer">
                   Help & Privacy Documentation
+                </button>
+              </li>
+              <li className="pt-1">
+                <button 
+                  onClick={() => { onNavigate('specialties'); window.scrollTo(0,0); }} 
+                  className="w-full text-left inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-600 hover:to-indigo-600 text-white font-black text-xs shadow-md border border-blue-400/50 transition-all cursor-pointer"
+                >
+                  <ShieldCheck className="w-4 h-4 text-cyan-300 shrink-0" />
+                  <span>NMCN Statutory Specialisations & Licensure Suite</span>
                 </button>
               </li>
             </ul>
