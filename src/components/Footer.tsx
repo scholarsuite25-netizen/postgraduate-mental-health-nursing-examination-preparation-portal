@@ -48,7 +48,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
               <li>
                 <button onClick={() => { onNavigate('dashboard'); window.scrollTo(0,0); }} className="hover:text-emerald-400 transition-colors cursor-pointer">
-                  Candidate Dashboard
+                  WAPCNM Tutorial
                 </button>
               </li>
               <li>

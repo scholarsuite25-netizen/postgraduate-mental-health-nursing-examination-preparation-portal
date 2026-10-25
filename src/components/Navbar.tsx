@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'dashboard', label: 'WAPCNM Tutorial', icon: LayoutDashboard },
     { id: 'clinical-exams', label: 'Clinical Exams', icon: Activity, badge: 'CAOSCE & NGN' },
     { id: 'modules', label: 'Modules & Practice', icon: BookOpen },
     { id: 'reports', label: 'My Reports', icon: FileText, badge: reportCount > 0 ? reportCount : undefined },
