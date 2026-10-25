@@ -103,7 +103,7 @@ export const NMCNAllSpecialtiesView: React.FC<NMCNAllSpecialtiesViewProps> = ({
             NMCN Professional Nursing Specialisations & Global Licensure
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Statutory council curricula and clinical examination standards across the 6 registered post-basic nursing specialisations (Medical-Surgical, Midwifery, Paediatric, Public Health, Accident & Emergency / Critical Care, and Mental Health & Psychiatric Nursing). Evaluated against the official council benchmark: <strong>50.0% Pass Mark</strong>, <strong>75.0% Distinction</strong>, and non-negotiable <strong>Red Flag patient safety policies</strong>.
+            Statutory council curricula and clinical examination standards across the 6 registered post-basic nursing specialisations (Mental Health & Psychiatric Nursing, Medical-Surgical, Midwifery, Paediatric, Public Health, and Accident & Emergency / Critical Care). Evaluated against the official council benchmark: <strong>50.0% Pass Mark</strong>, <strong>75.0% Distinction</strong>, and non-negotiable <strong>Red Flag patient safety policies</strong>.
           </p>
         </div>
       </div>
@@ -112,7 +112,7 @@ export const NMCNAllSpecialtiesView: React.FC<NMCNAllSpecialtiesViewProps> = ({
       <div className="flex flex-wrap gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
         {NMCN_SPECIALTIES.map((spec, idx) => {
           const isSelected = idx === selectedSpecialtyIndex;
-          const icons = ['🩺', '👶', '🧸', '💉', '🚑', '🧠'];
+          const icons = ['🧠', '🩺', '👶', '🧸', '💉', '🚑'];
           return (
             <button
               key={spec.id}

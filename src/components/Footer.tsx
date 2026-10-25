@@ -29,7 +29,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
             <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-800 leading-relaxed">
               <strong className="text-blue-400 font-semibold block mb-0.5">NMCN Statutory Professional Specialisations:</strong>
-              NMCN statutory professional examinations govern the 6 registered post-basic specialisations (Medical-Surgical, Midwifery, Paediatrics, Public Health, Accident & Emergency / Critical Care, and Mental Health & Psychiatric Nursing).
+              NMCN statutory professional examinations govern the 6 registered post-basic specialisations (Mental Health & Psychiatric Nursing, Medical-Surgical, Midwifery, Paediatrics, Public Health, and Accident & Emergency / Critical Care).
             </div>
           </div>
 
