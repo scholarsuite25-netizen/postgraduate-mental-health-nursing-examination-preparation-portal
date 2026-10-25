@@ -38,7 +38,7 @@ export const ClinicalExamCenter: React.FC<ClinicalExamCenterProps> = ({
         <div className="relative z-10 max-w-4xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-4">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Postgraduate Fellowship Accreditation Standard (WAPCNM / NMCN)
+            Postgraduate Fellowship Accreditation Standard (WAPCNM Faculty of Mental Health & Psychiatric Nursing)
           </div>
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-3">
             Postgraduate Mental Health Clinical Examination Suites

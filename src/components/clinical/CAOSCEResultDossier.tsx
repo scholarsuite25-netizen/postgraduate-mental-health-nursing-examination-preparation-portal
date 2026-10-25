@@ -289,7 +289,7 @@ export const CAOSCEResultDossier: React.FC<CAOSCEResultDossierProps> = ({
         {/* Regulatory Sign-off Footer */}
         <div className="pt-8 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 text-center space-y-2">
           <p>
-            Autonomous CAOSCE Engine certified under Statutory Cap N143 LFN 2004 & WAPCNM Postgraduate Examination Guidelines.
+            Autonomous CAOSCE Clinical Simulation Engine certified under WAPCNM Postgraduate Examination Guidelines (Faculty of Mental Health & Psychiatric Nursing).
           </p>
           <div className="font-mono text-[11px]">
             Security Verification Hash: {report.id} • Verified Candidate: {report.candidateName}

@@ -27,15 +27,33 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <div className="text-xs text-emerald-400 font-medium">
               ✨ Your success in the examination starts with disciplined daily practice!
             </div>
+            <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-800 leading-relaxed">
+              <strong className="text-blue-400 font-semibold block mb-0.5">Statutory Council Scope Note:</strong>
+              NMCN statutory examinations govern the 5 core post-basic specialisations (Medical-Surgical, Midwifery, Paediatric, Public Health, A&E/Critical Care). Mental Health Specialty Fellowship examinations are administered under WAPCNM.
+            </div>
           </div>
 
           {/* Col 2: Quick Navigation */}
           <div className="space-y-3">
             <h4 className="font-bold text-white text-sm">Quick Portal Navigation</h4>
             <ul className="space-y-2 text-xs">
+              <li className="pb-1">
+                <button 
+                  onClick={() => { onNavigate('specialties'); window.scrollTo(0,0); }} 
+                  className="w-full text-left inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-600 hover:to-indigo-600 text-white font-black text-xs shadow-md border border-blue-400/50 transition-all cursor-pointer"
+                >
+                  <ShieldCheck className="w-4 h-4 text-cyan-300 shrink-0" />
+                  <span>NMCN Statutory Specialisations & Licensure Suite</span>
+                </button>
+              </li>
               <li>
                 <button onClick={() => { onNavigate('dashboard'); window.scrollTo(0,0); }} className="hover:text-emerald-400 transition-colors cursor-pointer">
                   Candidate Dashboard
+                </button>
+              </li>
+              <li>
+                <button onClick={() => { onNavigate('clinical-exams'); window.scrollTo(0,0); }} className="hover:text-emerald-400 transition-colors cursor-pointer">
+                  Clinical Examination Center (CAOSCE & NGN)
                 </button>
               </li>
               <li>

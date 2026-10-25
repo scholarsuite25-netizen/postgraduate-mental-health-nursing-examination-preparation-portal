@@ -19,7 +19,6 @@ import { MockExamSession } from './components/MockExamSession';
 import { AssessmentResult } from './components/AssessmentResult';
 import { MyReports } from './components/MyReports';
 import { BookmarksAndReview } from './components/BookmarksAndReview';
-import { QuestionBankManager } from './components/QuestionBankManager';
 import { HelpAndPrivacy } from './components/HelpAndPrivacy';
 import { ClinicalExamCenter } from './components/clinical/ClinicalExamCenter';
 import { CAOSCESession } from './components/clinical/CAOSCESession';
@@ -331,13 +330,6 @@ export default function App() {
           <BookmarksAndReview
             questions={questions}
             onStartTargetedPractice={handleStartTargetedPractice}
-          />
-        )}
-
-        {activeTab === 'admin' && (
-          <QuestionBankManager
-            questions={questions}
-            onQuestionsUpdated={loadAppData}
           />
         )}
 

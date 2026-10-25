@@ -71,9 +71,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'modules', label: 'Modules & Practice', icon: BookOpen },
     { id: 'reports', label: 'My Reports', icon: FileText, badge: reportCount > 0 ? reportCount : undefined },
     { id: 'bookmarks', label: 'Bookmarks & Review', icon: Bookmark },
-    { id: 'admin', label: 'Question Bank', icon: Settings, count: questionCount },
+    { id: 'specialties', label: 'NMCN Specialisations', icon: ShieldCheck, isNMCN: true, badge: 'STATUTORY' },
     { id: 'help', label: 'Help & Privacy', icon: HelpCircle },
-    { id: 'specialties', label: 'NMCN Specialisations', icon: ShieldCheck },
   ];
 
   return (
@@ -155,34 +154,42 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Desktop Navigation Tabs */}
-        <nav className="hidden lg:flex space-x-1 pb-2 scrollbar-none">
+        <nav className="hidden lg:flex items-center space-x-1.5 pb-2 scrollbar-none">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
+            const isNMCN = item.id === 'specialties';
+
+            let btnClasses = '';
+            if (isNMCN) {
+              btnClasses = isActive
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30 ring-2 ring-blue-400 font-black uppercase tracking-wider border border-blue-400'
+                : 'bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border-2 border-blue-500 dark:border-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900 font-extrabold uppercase tracking-wider shadow-sm';
+            } else {
+              btnClasses = isActive
+                ? 'bg-emerald-600 text-white shadow-xs shadow-emerald-600/20 font-semibold'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white font-medium';
+            }
+
             return (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-emerald-600 text-white shadow-xs shadow-emerald-600/20'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all cursor-pointer ${btnClasses}`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${
+                  isNMCN 
+                    ? isActive ? 'text-white' : 'text-blue-600 dark:text-blue-400'
+                    : isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400'
+                }`} />
                 <span>{item.label}</span>
                 {item.badge !== undefined && (
-                  <span className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                    isActive ? 'bg-emerald-700 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                  <span className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-black tracking-wide ${
+                    isNMCN
+                      ? isActive ? 'bg-white text-blue-800' : 'bg-blue-600 text-white'
+                      : isActive ? 'bg-emerald-700 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                   }`}>
                     {item.badge}
-                  </span>
-                )}
-                {item.count !== undefined && (
-                  <span className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                    isActive ? 'bg-emerald-700 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
-                  }`}>
-                    {item.count}
                   </span>
                 )}
               </button>
@@ -215,28 +222,36 @@ export const Navbar: React.FC<NavbarProps> = ({
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
+                const isNMCN = item.id === 'specialties';
+
+                let mobileClasses = '';
+                if (isNMCN) {
+                  mobileClasses = isActive
+                    ? 'bg-blue-600 text-white shadow-md font-extrabold border-2 border-blue-400 sm:col-span-2'
+                    : 'bg-blue-50 dark:bg-blue-950/80 text-blue-800 dark:text-blue-200 border-2 border-blue-500 font-extrabold shadow-sm sm:col-span-2';
+                } else {
+                  mobileClasses = isActive
+                    ? 'bg-emerald-600 text-white shadow-sm font-semibold'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 font-medium';
+                }
+
                 return (
                   <button
                     key={item.id}
                     onClick={() => { setActiveTab(item.id); setMobileMenuOpen(false); }}
-                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                      isActive
-                        ? 'bg-emerald-600 text-white shadow-sm'
-                        : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
-                    }`}
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm transition-all ${mobileClasses}`}
                   >
                     <div className="flex items-center gap-3">
-                      <Icon className="w-4 h-4" />
-                      <span>{item.label}</span>
+                      <Icon className={`w-4 h-4 ${isNMCN && !isActive ? 'text-blue-600 dark:text-blue-400' : ''}`} />
+                      <span className={isNMCN ? 'tracking-wide' : ''}>{item.label}</span>
                     </div>
                     {item.badge !== undefined && (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-700 text-white">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-black ${
+                        isNMCN 
+                          ? isActive ? 'bg-white text-blue-800' : 'bg-blue-600 text-white'
+                          : 'bg-emerald-700 text-white'
+                      }`}>
                         {item.badge}
-                      </span>
-                    )}
-                    {item.count !== undefined && (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-700 text-white">
-                        {item.count}
                       </span>
                     )}
                   </button>
