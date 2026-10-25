@@ -32,6 +32,7 @@ An interactive, client-side examination preparation, learning, and self-assessme
   - Samples a balanced set of 70 questions (5 from each module).
   - 60-minute countdown timer with warnings.
   - Question palette navigation and bookmarking.
+  - **Tutorial Support Mode Toggle**: Immediate answer validation, red/green option highlighting, and detailed clinical explanations for candidates wanting live remedial feedback during mock preparation.
   - 70% Pass Mark criterion with detailed result slip generation.
 
 - **Postgraduate Clinical Examination Center (CAOSCE & Clinical Suites):**

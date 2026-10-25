@@ -11,7 +11,11 @@ import {
   Send, 
   Bookmark, 
   AlertTriangle, 
-  ShieldCheck 
+  ShieldCheck,
+  Sparkles,
+  CheckCircle2,
+  XCircle,
+  HelpCircle
 } from 'lucide-react';
 import { Question, AssessmentReport } from '../types';
 import { StorageService } from '../services/storageService';
@@ -38,6 +42,7 @@ export const MockExamSession: React.FC<MockExamSessionProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmSubmitOpen, setConfirmSubmitOpen] = useState(false);
   const [autoSubmitted, setAutoSubmitted] = useState(false);
+  const [tutorialSupportMode, setTutorialSupportMode] = useState<boolean>(true);
 
   const performSubmission = useCallback(async () => {
     if (isSubmitting || autoSubmitted) return;
@@ -121,12 +126,27 @@ export const MockExamSession: React.FC<MockExamSessionProps> = ({
 
   const currentQ = questions[currentIndex];
   const selectedOpt = selectedAnswers[currentQ?.id] || null;
+  const isAnswerCorrect = selectedOpt === currentQ?.correctAnswer;
 
   const handleSelectOption = (optId: 'A' | 'B' | 'C' | 'D') => {
     setSelectedAnswers(prev => ({
       ...prev,
       [currentQ.id]: optId
     }));
+
+    if (optId !== currentQ.correctAnswer) {
+      StorageService.recordIncorrectAnswer(currentQ.id, currentQ.module, optId);
+    } else {
+      StorageService.removeFromIncorrectQueue(currentQ.id);
+    }
+  };
+
+  const handleRetryOption = () => {
+    setSelectedAnswers(prev => {
+      const next = { ...prev };
+      delete next[currentQ.id];
+      return next;
+    });
   };
 
   const handleToggleBookmark = async () => {
@@ -158,14 +178,27 @@ export const MockExamSession: React.FC<MockExamSessionProps> = ({
           </h2>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold shadow-xs ${
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => setTutorialSupportMode(prev => !prev)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              tutorialSupportMode
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 shadow-sm ring-1 ring-emerald-400/50'
+                : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'
+            }`}
+            title="Toggle immediate answer validation and explanations"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Tutorial Support: {tutorialSupportMode ? 'ACTIVE (Instant Feedback)' : 'OFF (Silent Exam)'}</span>
+          </button>
+
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold shadow-xs ${
             timeLeftSeconds < 300 
               ? 'bg-rose-600 text-white animate-pulse ring-2 ring-rose-400' 
               : 'bg-slate-800 text-emerald-400 border border-slate-700'
           }`}>
             <Clock className="w-4 h-4" />
-            <span>Time Remaining: {formatTimer(timeLeftSeconds)} {timeLeftSeconds < 300 ? '(URGENT)' : ''}</span>
+            <span>{formatTimer(timeLeftSeconds)} {timeLeftSeconds < 300 ? '(URGENT)' : ''}</span>
           </div>
 
           <button
@@ -214,28 +247,123 @@ export const MockExamSession: React.FC<MockExamSessionProps> = ({
             <div className="space-y-3">
               {currentQ.options.map((opt) => {
                 const isSelected = selectedOpt === opt.id;
+                const isCorrectOption = opt.id === currentQ.correctAnswer;
+
+                let btnStyle = "border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 bg-white dark:bg-slate-800/40 text-slate-800 dark:text-slate-200";
+
+                if (tutorialSupportMode && selectedOpt !== null) {
+                  if (isCorrectOption) {
+                    btnStyle = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-100 ring-2 ring-emerald-500 shadow-xs";
+                  } else if (isSelected && !isCorrectOption) {
+                    btnStyle = "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-950 dark:text-rose-100 ring-2 ring-rose-500 shadow-xs";
+                  } else {
+                    btnStyle = "border-slate-200 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/40 text-slate-500 dark:text-slate-400 opacity-70";
+                  }
+                } else if (isSelected) {
+                  btnStyle = "border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 ring-1 ring-emerald-600";
+                }
+
                 return (
                   <button
                     key={opt.id}
                     onClick={() => handleSelectOption(opt.id)}
-                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3.5 cursor-pointer ${
-                      isSelected 
-                        ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 ring-1 ring-emerald-600' 
-                        : 'border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 bg-white dark:bg-slate-800/40 text-slate-800 dark:text-slate-200'
-                    }`}
+                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3.5 cursor-pointer ${btnStyle}`}
                   >
                     <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
-                      isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                      tutorialSupportMode && selectedOpt !== null && isCorrectOption
+                        ? 'bg-emerald-600 text-white'
+                        : tutorialSupportMode && selectedOpt !== null && isSelected && !isCorrectOption
+                        ? 'bg-rose-600 text-white'
+                        : isSelected
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                     }`}>
                       {opt.id}
                     </span>
                     <span className="text-sm sm:text-base leading-relaxed flex-1">
                       {opt.text}
                     </span>
+                    {tutorialSupportMode && selectedOpt !== null && isCorrectOption && (
+                      <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300 font-bold text-xs bg-emerald-100/90 dark:bg-emerald-900/70 px-2.5 py-1 rounded-md shrink-0">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>Correct Answer</span>
+                      </div>
+                    )}
+                    {tutorialSupportMode && selectedOpt !== null && isSelected && !isCorrectOption && (
+                      <div className="flex items-center gap-1.5 text-rose-700 dark:text-rose-300 font-bold text-xs bg-rose-100/90 dark:bg-rose-900/70 px-2.5 py-1 rounded-md shrink-0">
+                        <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                        <span>Your Answer (Incorrect)</span>
+                      </div>
+                    )}
                   </button>
                 );
               })}
             </div>
+
+            {/* Immediate Tutorial Support Box */}
+            {tutorialSupportMode && selectedOpt !== null && (
+              <div className={`p-5 rounded-2xl border space-y-4 animate-fadeIn ${
+                !isAnswerCorrect
+                  ? 'bg-rose-50/70 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900/60'
+                  : 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900/60'
+              }`}>
+                {/* Header Alert */}
+                {!isAnswerCorrect ? (
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-rose-200 dark:border-rose-900/60">
+                    <div className="flex items-center gap-2.5 text-rose-800 dark:text-rose-300 font-bold text-sm sm:text-base">
+                      <XCircle className="w-5 h-5 text-rose-600 shrink-0" />
+                      <span>Incorrect Choice — Review Correct Answer & Clinical Explanation</span>
+                    </div>
+                    <button
+                      onClick={handleRetryOption}
+                      className="self-start sm:self-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-rose-200/80 hover:bg-rose-300 dark:bg-rose-900/80 dark:hover:bg-rose-800 text-rose-900 dark:text-rose-100 transition-colors cursor-pointer"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2.5 text-emerald-800 dark:text-emerald-300 font-bold text-sm sm:text-base pb-3 border-b border-emerald-200 dark:border-emerald-900/60">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <span>Correct Answer! Well done.</span>
+                  </div>
+                )}
+
+                {/* Direct Comparison */}
+                <div className={`p-3.5 rounded-xl border text-xs sm:text-sm space-y-1.5 ${
+                  !isAnswerCorrect 
+                    ? 'bg-white dark:bg-slate-900 border-rose-200 dark:border-rose-900/60' 
+                    : 'bg-white dark:bg-slate-900 border-emerald-200 dark:border-emerald-900/60'
+                }`}>
+                  <div className="flex items-start gap-2">
+                    <span className="font-bold text-emerald-700 dark:text-emerald-400 shrink-0">
+                      ✓ Correct Answer:
+                    </span>
+                    <span className="font-semibold text-slate-900 dark:text-white">
+                      Option {currentQ.correctAnswer} — {currentQ.options.find(o => o.id === currentQ.correctAnswer)?.text}
+                    </span>
+                  </div>
+                  {!isAnswerCorrect && selectedOpt && (
+                    <div className="flex items-start gap-2 text-rose-700 dark:text-rose-400">
+                      <span className="font-bold shrink-0">✕ Your Choice:</span>
+                      <span>
+                        Option {selectedOpt} — {currentQ.options.find(o => o.id === selectedOpt)?.text}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Explanation */}
+                <div className="p-4 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-800 dark:text-slate-200 space-y-1.5">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+                    <Sparkles className="w-4 h-4 text-emerald-600" />
+                    <span>Tutorial Support Rationale (Why Option {currentQ.correctAnswer} is Correct)</span>
+                  </div>
+                  <p className="leading-relaxed text-slate-700 dark:text-slate-300">
+                    {currentQ.explanation}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Navigation */}
@@ -271,8 +399,21 @@ export const MockExamSession: React.FC<MockExamSessionProps> = ({
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">Question Palette</h4>
             <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto p-1">
               {questions.map((q, idx) => {
-                const isAnswered = selectedAnswers[q.id] !== undefined && selectedAnswers[q.id] !== null;
+                const ans = selectedAnswers[q.id];
+                const isAnswered = ans !== undefined && ans !== null;
                 const isCurrent = idx === currentIndex;
+                const isCorrect = ans === q.correctAnswer;
+
+                let paletteColor = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200';
+                if (isAnswered) {
+                  if (tutorialSupportMode) {
+                    paletteColor = isCorrect
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'bg-rose-600 text-white shadow-xs';
+                  } else {
+                    paletteColor = 'bg-emerald-600 text-white shadow-xs';
+                  }
+                }
 
                 return (
                   <button
@@ -282,11 +423,7 @@ export const MockExamSession: React.FC<MockExamSessionProps> = ({
                       isCurrent
                         ? 'ring-2 ring-emerald-600 ring-offset-2 dark:ring-offset-slate-900'
                         : ''
-                    } ${
-                      isAnswered
-                        ? 'bg-emerald-600 text-white shadow-xs'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
-                    }`}
+                    } ${paletteColor}`}
                   >
                     {idx + 1}
                   </button>

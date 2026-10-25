@@ -685,34 +685,117 @@ export const CAOSCESession: React.FC<CAOSCESessionProps> = ({
                     <div className="space-y-2 pt-1">
                       {q.options.map((opt) => {
                         const isSelected = mcqAnswers[q.id] === opt.id;
+                        const hasAnswered = mcqAnswers[q.id] !== undefined && mcqAnswers[q.id] !== null;
+                        const isCorrect = mcqAnswers[q.id] === q.correctAnswer;
+                        const isCorrectOpt = opt.id === q.correctAnswer;
+
+                        let optionStyle = 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-indigo-400';
+
+                        if (hasAnswered) {
+                          if (isCorrectOpt) {
+                            optionStyle = 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-100 border-emerald-500 font-semibold ring-1 ring-emerald-500';
+                          } else if (isSelected && !isCorrect) {
+                            optionStyle = 'bg-rose-50 dark:bg-rose-950/40 text-rose-950 dark:text-rose-100 border-rose-500 font-medium ring-1 ring-rose-500';
+                          } else {
+                            optionStyle = 'bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-800 opacity-60';
+                          }
+                        }
+
                         return (
                           <button
                             key={opt.id}
                             onClick={() => handleSelectMCQ(q.id, opt.id)}
-                            className={`w-full text-left p-3 rounded-lg border text-xs sm:text-sm transition-all flex items-start gap-2.5 ${
-                              isSelected
-                                ? 'bg-indigo-600 text-white font-medium border-indigo-600 shadow-sm'
-                                : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-indigo-400'
-                            }`}
+                            className={`w-full text-left p-3 rounded-lg border text-xs sm:text-sm transition-all flex items-start gap-2.5 ${optionStyle}`}
                           >
                             <span
                               className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
-                                isSelected
-                                  ? 'bg-white text-indigo-700'
+                                hasAnswered && isCorrectOpt
+                                  ? 'bg-emerald-600 text-white'
+                                  : hasAnswered && isSelected && !isCorrect
+                                  ? 'bg-rose-600 text-white'
                                   : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                               }`}
                             >
                               {opt.id}
                             </span>
-                            <span className="leading-snug">{opt.text}</span>
+                            <span className="leading-snug flex-1">{opt.text}</span>
+                            {hasAnswered && isCorrectOpt && (
+                              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 shrink-0">
+                                ✓ Correct
+                              </span>
+                            )}
+                            {hasAnswered && isSelected && !isCorrect && (
+                              <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 shrink-0">
+                                ✕ Your Choice
+                              </span>
+                            )}
                           </button>
                         );
                       })}
                     </div>
 
-                    {mode === 'self-paced' && mcqAnswers[q.id] && (
-                      <div className="mt-2 p-2.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-xs text-indigo-900 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 leading-relaxed">
-                        <strong>Correct Answer: {q.correctAnswer}</strong> — {q.explanation}
+                    {/* Immediate Post-Attempt Clinical Tutorial Support */}
+                    {mcqAnswers[q.id] !== undefined && mcqAnswers[q.id] !== null && (
+                      <div className={`mt-3 p-4 rounded-xl border text-xs sm:text-sm space-y-2.5 animate-fadeIn ${
+                        mcqAnswers[q.id] !== q.correctAnswer 
+                          ? 'bg-rose-50/70 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900/60'
+                          : 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900/60'
+                      }`}>
+                        <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
+                          <div className="flex items-center gap-2 font-bold">
+                            {mcqAnswers[q.id] !== q.correctAnswer ? (
+                              <span className="text-rose-700 dark:text-rose-300 flex items-center gap-1.5 font-bold">
+                                <span>✕</span> Incorrect Answer Supplied — Tutorial Support Active
+                              </span>
+                            ) : (
+                              <span className="text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5 font-bold">
+                                <span>✓</span> Correct Clinical Decision! Well done.
+                              </span>
+                            )}
+                          </div>
+                          {mcqAnswers[q.id] !== q.correctAnswer && (
+                            <button
+                              onClick={() => {
+                                setMcqAnswers(prev => {
+                                  const next = { ...prev };
+                                  delete next[q.id];
+                                  return next;
+                                });
+                              }}
+                              className="text-[11px] font-bold px-2.5 py-1 rounded bg-rose-200/80 hover:bg-rose-300 dark:bg-rose-900/80 dark:hover:bg-rose-800 text-rose-900 dark:text-rose-100 transition-colors cursor-pointer"
+                            >
+                              Try Again
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Direct Comparison */}
+                        <div className="space-y-1">
+                          <div className="flex items-start gap-1.5 font-semibold text-emerald-800 dark:text-emerald-300">
+                            <span className="font-bold shrink-0">✓ Validated Correct Answer:</span>
+                            <span>
+                              Option {q.correctAnswer} — {q.options.find(o => o.id === q.correctAnswer)?.text}
+                            </span>
+                          </div>
+                          {mcqAnswers[q.id] !== q.correctAnswer && (
+                            <div className="flex items-start gap-1.5 text-rose-700 dark:text-rose-400">
+                              <span className="font-bold shrink-0">✕ Your Choice:</span>
+                              <span>
+                                Option {mcqAnswers[q.id]} — {q.options.find(o => o.id === mcqAnswers[q.id])?.text}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Clinical Rationale */}
+                        <div className="p-3 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 space-y-1">
+                          <strong className="text-slate-900 dark:text-white block font-bold text-xs uppercase tracking-wide">
+                            Station Clinical Rationale:
+                          </strong>
+                          <p className="leading-relaxed text-xs">
+                            {q.explanation}
+                          </p>
+                        </div>
                       </div>
                     )}
                   </div>

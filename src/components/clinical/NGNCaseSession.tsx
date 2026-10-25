@@ -231,6 +231,7 @@ export const NGNCaseSession: React.FC<NGNCaseSessionProps> = ({
               {currentStage.options.map((opt) => {
                 const isSelected = selectedAnswers[currentStageIndex] === opt.id;
                 const hasAnswered = !!selectedAnswers[currentStageIndex];
+                const isCorrect = opt.isCorrect;
 
                 let optionStyle =
                   'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-indigo-400';
@@ -238,10 +239,10 @@ export const NGNCaseSession: React.FC<NGNCaseSessionProps> = ({
                 if (hasAnswered) {
                   if (opt.isCorrect) {
                     optionStyle =
-                      'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-500 text-emerald-900 dark:text-emerald-200 font-semibold';
+                      'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-500 text-emerald-900 dark:text-emerald-200 font-semibold ring-1 ring-emerald-500';
                   } else if (isSelected && !opt.isCorrect) {
                     optionStyle =
-                      'bg-rose-50 dark:bg-rose-950/50 border-rose-500 text-rose-900 dark:text-rose-200';
+                      'bg-rose-50 dark:bg-rose-950/50 border-rose-500 text-rose-900 dark:text-rose-200 font-medium ring-1 ring-rose-500';
                   } else {
                     optionStyle =
                       'bg-white dark:bg-slate-900 text-slate-400 border-slate-200 dark:border-slate-800 opacity-60';
@@ -267,21 +268,93 @@ export const NGNCaseSession: React.FC<NGNCaseSessionProps> = ({
                       {opt.id}
                     </span>
                     <span className="leading-snug flex-1">{opt.text}</span>
+                    {hasAnswered && opt.isCorrect && (
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 shrink-0">
+                        ✓ Correct Decision
+                      </span>
+                    )}
+                    {hasAnswered && isSelected && !opt.isCorrect && (
+                      <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 shrink-0">
+                        ✕ Selected (Suboptimal)
+                      </span>
+                    )}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Explanation Box (once answered) */}
-          {selectedAnswers[currentStageIndex] && (
-            <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-xs sm:text-sm text-indigo-950 dark:text-indigo-200 space-y-2 animate-fadeIn">
-              <div className="font-bold flex items-center gap-2">
-                <span>💡</span> Clinical Judgment Rationale ({currentStage.cognitiveLevel}):
+          {/* Tutorial Support & Immediate Post-Attempt Clinical Explanation Box */}
+          {selectedAnswers[currentStageIndex] && (() => {
+            const chosenId = selectedAnswers[currentStageIndex];
+            const correctOpt = currentStage.options.find(o => o.isCorrect);
+            const chosenOpt = currentStage.options.find(o => o.id === chosenId);
+            const isStageCorrect = chosenId === correctOpt?.id;
+
+            return (
+              <div className={`p-5 rounded-2xl border text-xs sm:text-sm space-y-3 animate-fadeIn ${
+                !isStageCorrect
+                  ? 'bg-rose-50/70 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900/60'
+                  : 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900/60'
+              }`}>
+                <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
+                  <div className="flex items-center gap-2 font-bold">
+                    {!isStageCorrect ? (
+                      <span className="text-rose-700 dark:text-rose-300 flex items-center gap-1.5 font-bold">
+                        <span>✕</span> Suboptimal Clinical Judgment — Tutorial Support Active
+                      </span>
+                    ) : (
+                      <span className="text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5 font-bold">
+                        <span>✓</span> Priority Clinical Judgment Validated! Well done.
+                      </span>
+                    )}
+                  </div>
+                  {!isStageCorrect && (
+                    <button
+                      onClick={() => {
+                        setSelectedAnswers(prev => {
+                          const next = { ...prev };
+                          delete next[currentStageIndex];
+                          return next;
+                        });
+                      }}
+                      className="text-[11px] font-bold px-2.5 py-1 rounded bg-rose-200/80 hover:bg-rose-300 dark:bg-rose-900/80 dark:hover:bg-rose-800 text-rose-900 dark:text-rose-100 transition-colors cursor-pointer"
+                    >
+                      Try Again
+                    </button>
+                  )}
+                </div>
+
+                {/* Direct Comparison */}
+                <div className="space-y-1 text-xs">
+                  <div className="flex items-start gap-1.5 font-semibold text-emerald-800 dark:text-emerald-300">
+                    <span className="font-bold shrink-0">✓ Validated Priority Action:</span>
+                    <span>
+                      Option {correctOpt?.id} — {correctOpt?.text}
+                    </span>
+                  </div>
+                  {!isStageCorrect && chosenOpt && (
+                    <div className="flex items-start gap-1.5 text-rose-700 dark:text-rose-400">
+                      <span className="font-bold shrink-0">✕ Your Decision:</span>
+                      <span>
+                        Option {chosenOpt.id} — {chosenOpt.text}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Clinical Judgment Rationale */}
+                <div className="p-3.5 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 space-y-1.5">
+                  <div className="font-bold flex items-center gap-1.5 text-slate-900 dark:text-white text-xs">
+                    <span>💡</span> NCSBN Clinical Judgment Rationale ({currentStage.cognitiveLevel}):
+                  </div>
+                  <p className="leading-relaxed text-xs text-slate-700 dark:text-slate-300">
+                    {currentStage.clinicalRationale}
+                  </p>
+                </div>
               </div>
-              <p className="leading-relaxed">{currentStage.clinicalRationale}</p>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Action Bar */}
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">

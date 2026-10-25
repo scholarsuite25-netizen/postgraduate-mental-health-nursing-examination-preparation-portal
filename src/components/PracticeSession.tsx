@@ -181,6 +181,11 @@ export const PracticeSession: React.FC<PracticeSessionProps> = ({
             <span className="uppercase px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">
               {mode} mode
             </span>
+            <span>•</span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold">
+              <Sparkles className="w-3 h-3 text-indigo-500" />
+              Tutorial Support Active
+            </span>
           </div>
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
             Question {currentIndex + 1} of {questions.length}
@@ -300,7 +305,7 @@ export const PracticeSession: React.FC<PracticeSessionProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-rose-200 dark:border-rose-900/60">
                 <div className="flex items-center gap-2.5 text-rose-800 dark:text-rose-300 font-bold text-base sm:text-lg">
                   <XCircle className="w-6 h-6 text-rose-600 shrink-0" />
-                  <span>Incorrect — Review Correct Answer & Clinical Explanation</span>
+                  <span>Incorrect Answer Supplied — Tutorial Support & Clinical Explanation</span>
                 </div>
                 <button
                   onClick={handleRetryQuestion}

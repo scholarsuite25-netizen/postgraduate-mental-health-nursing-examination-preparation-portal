@@ -19,7 +19,8 @@ import {
   Sparkles,
   ArrowRight,
   Search,
-  HelpCircle
+  HelpCircle,
+  X
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -65,6 +66,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMatch, setSelectedMatch] = useState<Question | null>(null);
+  const [previewSelectedOption, setPreviewSelectedOption] = useState<'A' | 'B' | 'C' | 'D' | null>(null);
 
   const totalQuestions = questions.length;
   const completedAssessments = reports.length;
@@ -144,7 +146,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 {searchResults.map((q) => (
                   <div 
                     key={q.id}
-                    onClick={() => setSelectedMatch(q)}
+                    onClick={() => {
+                      setSelectedMatch(q);
+                      setPreviewSelectedOption(null);
+                    }}
                     className="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors space-y-1"
                   >
                     <div className="flex items-center justify-between text-[11px] text-slate-400">
@@ -554,6 +559,173 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Interactive Question Tutorial Support Modal for Search Previews */}
+      {selectedMatch && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto space-y-5 animate-fadeIn">
+            <div className="flex items-start justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-0.5">
+                  <span>{selectedMatch.module}</span>
+                  <span>•</span>
+                  <span>{selectedMatch.topic}</span>
+                </div>
+                <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-white">
+                  {selectedMatch.questionText}
+                </h3>
+              </div>
+              <button
+                onClick={() => setSelectedMatch(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Test Yourself Options */}
+            <div className="space-y-2.5">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                Select an answer to test validation & tutorial support:
+              </span>
+              {selectedMatch.options.map((opt) => {
+                const isSelected = previewSelectedOption === opt.id;
+                const isCorrect = opt.id === selectedMatch.correctAnswer;
+                const hasAnswered = previewSelectedOption !== null;
+
+                let optStyle = "border-slate-200 dark:border-slate-800 hover:border-emerald-400 bg-white dark:bg-slate-800/40 text-slate-800 dark:text-slate-200";
+
+                if (hasAnswered) {
+                  if (isCorrect) {
+                    optStyle = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-100 ring-2 ring-emerald-500 font-medium";
+                  } else if (isSelected && !isCorrect) {
+                    optStyle = "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-950 dark:text-rose-100 ring-2 ring-rose-500 font-medium";
+                  } else {
+                    optStyle = "border-slate-200 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/40 text-slate-400 opacity-60";
+                  }
+                }
+
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => setPreviewSelectedOption(opt.id)}
+                    className={`w-full text-left p-3.5 rounded-xl border text-xs sm:text-sm transition-all flex items-start gap-3 cursor-pointer ${optStyle}`}
+                  >
+                    <span className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
+                      hasAnswered && isCorrect
+                        ? 'bg-emerald-600 text-white'
+                        : hasAnswered && isSelected && !isCorrect
+                        ? 'bg-rose-600 text-white'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                    }`}>
+                      {opt.id}
+                    </span>
+                    <span className="flex-1 leading-snug">{opt.text}</span>
+                    {hasAnswered && isCorrect && (
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 shrink-0">
+                        ✓ Correct Answer
+                      </span>
+                    )}
+                    {hasAnswered && isSelected && !isCorrect && (
+                      <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 shrink-0">
+                        ✕ Selected Incorrectly
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Immediate Tutorial Support Box */}
+            {previewSelectedOption !== null && (() => {
+              const isCorrect = previewSelectedOption === selectedMatch.correctAnswer;
+              const correctOpt = selectedMatch.options.find(o => o.id === selectedMatch.correctAnswer);
+              const chosenOpt = selectedMatch.options.find(o => o.id === previewSelectedOption);
+
+              return (
+                <div className={`p-4 rounded-xl border text-xs sm:text-sm space-y-3 animate-fadeIn ${
+                  !isCorrect
+                    ? 'bg-rose-50/70 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900/60'
+                    : 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900/60'
+                }`}>
+                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
+                    <div className="flex items-center gap-2 font-bold">
+                      {!isCorrect ? (
+                        <span className="text-rose-700 dark:text-rose-300 flex items-center gap-1.5 font-bold">
+                          <XCircle className="w-4 h-4 text-rose-600" />
+                          Incorrect Choice — Tutorial Support Active
+                        </span>
+                      ) : (
+                        <span className="text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5 font-bold">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          Correct Answer Validated! Well done.
+                        </span>
+                      )}
+                    </div>
+                    {!isCorrect && (
+                      <button
+                        onClick={() => setPreviewSelectedOption(null)}
+                        className="text-[11px] font-bold px-2 py-1 rounded bg-rose-200/80 hover:bg-rose-300 dark:bg-rose-900/80 dark:hover:bg-rose-800 text-rose-900 dark:text-rose-100 transition-colors cursor-pointer"
+                      >
+                        Try Again
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Direct Comparison */}
+                  <div className="space-y-1 text-xs">
+                    <div className="flex items-start gap-1.5 font-semibold text-emerald-800 dark:text-emerald-300">
+                      <span className="font-bold shrink-0">✓ Validated Correct Answer:</span>
+                      <span>
+                        Option {selectedMatch.correctAnswer} — {correctOpt?.text}
+                      </span>
+                    </div>
+                    {!isCorrect && chosenOpt && (
+                      <div className="flex items-start gap-1.5 text-rose-700 dark:text-rose-400">
+                        <span className="font-bold shrink-0">✕ Your Choice:</span>
+                        <span>
+                          Option {chosenOpt.id} — {chosenOpt.text}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Rationale */}
+                  <div className="p-3.5 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 space-y-1">
+                    <strong className="text-slate-900 dark:text-white block font-bold text-xs uppercase tracking-wide">
+                      Clinical Tutorial Explanation:
+                    </strong>
+                    <p className="leading-relaxed text-xs">
+                      {selectedMatch.explanation}
+                    </p>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Actions */}
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <button
+                onClick={() => setSelectedMatch(null)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                Close Preview
+              </button>
+              <button
+                onClick={() => {
+                  const targetModule = selectedMatch.module;
+                  setSelectedMatch(null);
+                  onStartPractice(targetModule);
+                }}
+                className="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Practice All Questions in this Module</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

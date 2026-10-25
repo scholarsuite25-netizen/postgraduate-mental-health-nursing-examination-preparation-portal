@@ -202,23 +202,81 @@ export const PsychopharmMathSession: React.FC<PsychopharmMathSessionProps> = ({
         </div>
 
         {/* Step-by-Step Solution Breakdown (Revealed once answered) */}
-        {selectedOptionId !== null && (
-          <div className="p-5 rounded-xl bg-teal-50/70 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800/60 space-y-3 animate-fadeIn">
-            <div className="font-bold text-sm text-teal-900 dark:text-teal-200 flex items-center gap-2">
-              <span>✅</span> Step-by-Step Mathematical Derivation & Proof:
-            </div>
-            <div className="space-y-1.5 text-xs text-teal-950 dark:text-teal-200 font-sans">
-              {currentProblem.stepByStepSolution.map((step, idx) => (
-                <div key={idx} className="leading-relaxed font-mono">
-                  {step}
+        {selectedOptionId !== null && (() => {
+          const correctOpt = currentProblem.options.find((o) => o.isCorrect);
+          const chosenOpt = currentProblem.options.find((o) => o.id === selectedOptionId);
+          const isProblemCorrect = selectedOptionId === correctOpt?.id;
+
+          return (
+            <div
+              className={`p-5 rounded-2xl border space-y-4 animate-fadeIn ${
+                !isProblemCorrect
+                  ? 'bg-rose-50/70 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900/60'
+                  : 'bg-teal-50/70 dark:bg-teal-950/40 border-teal-200 dark:border-teal-900/60'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
+                <div className="flex items-center gap-2 font-bold text-xs sm:text-sm">
+                  {!isProblemCorrect ? (
+                    <span className="text-rose-700 dark:text-rose-300 flex items-center gap-1.5 font-bold">
+                      <span>✕</span> Incorrect Dosage Calculation — Tutorial Support Active
+                    </span>
+                  ) : (
+                    <span className="text-teal-700 dark:text-teal-300 flex items-center gap-1.5 font-bold">
+                      <span>✓</span> Accurate Mathematical Derivation! Well done.
+                    </span>
+                  )}
                 </div>
-              ))}
+                {!isProblemCorrect && (
+                  <button
+                    onClick={() => {
+                      setSelectedOptionId(null);
+                    }}
+                    className="text-[11px] font-bold px-2.5 py-1 rounded bg-rose-200/80 hover:bg-rose-300 dark:bg-rose-900/80 dark:hover:bg-rose-800 text-rose-900 dark:text-rose-100 transition-colors cursor-pointer"
+                  >
+                    Try Again
+                  </button>
+                )}
+              </div>
+
+              {/* Direct Comparison */}
+              <div className="space-y-1 text-xs">
+                <div className="flex items-start gap-1.5 font-semibold text-teal-900 dark:text-teal-200">
+                  <span className="font-bold shrink-0">✓ Validated Correct Result:</span>
+                  <span>
+                    Option {correctOpt?.id} — {correctOpt?.text}
+                  </span>
+                </div>
+                {!isProblemCorrect && chosenOpt && (
+                  <div className="flex items-start gap-1.5 text-rose-700 dark:text-rose-400">
+                    <span className="font-bold shrink-0">✕ Your Calculated Value:</span>
+                    <span>
+                      Option {chosenOpt.id} — {chosenOpt.text}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Step-by-Step Derivation */}
+              <div className="p-4 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 space-y-2">
+                <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-2 uppercase tracking-wide">
+                  <span>📐</span> Step-by-Step Mathematical Derivation & Proof:
+                </div>
+                <div className="space-y-1 text-xs text-slate-800 dark:text-slate-200 font-mono">
+                  {currentProblem.stepByStepSolution.map((step, idx) => (
+                    <div key={idx} className="leading-relaxed">
+                      {step}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-3 rounded-lg bg-teal-100/60 dark:bg-teal-900/40 border border-teal-200/80 dark:border-teal-800 text-xs text-teal-950 dark:text-teal-200">
+                <strong>Clinical Significance:</strong> {currentProblem.clinicalSignificance}
+              </div>
             </div>
-            <div className="pt-2 border-t border-teal-200 dark:border-teal-800/80 text-xs text-teal-900 dark:text-teal-300 font-sans">
-              <strong>Clinical Significance:</strong> {currentProblem.clinicalSignificance}
-            </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Footer Navigation */}
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
